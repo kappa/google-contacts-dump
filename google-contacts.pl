@@ -81,6 +81,7 @@ sub retrieve_contacts {
 sub degoogle($) {
     my $ar = shift;
 
+    $ar = [ $ar ] unless ref $ar eq 'ARRAY';
     for my $i (@$ar) {
     	delete $i->{primary} if @$ar == 1;
 

@@ -142,7 +142,7 @@ sub dump_contacts {
 sub get_feed {
     my($self, $path, %param) = @_;
 
-    my $uri = URI->new("http://www.google.com/m8/feeds/$path");
+    my $uri = URI->new("https://www.google.com/m8/feeds/$path");
     $param{v} = '3.0';
     $uri->query_form(%param);
     my $res = $self->agent->get($uri, %{ $self->auth_params });

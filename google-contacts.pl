@@ -11,16 +11,16 @@ use uni::perl;
 
 package Google::Contacts::Dump;
 use Any::Moose;
-use Net::Google::AuthSub;
+use OAuth::Cmdline;
 use LWP::UserAgent;
 use XML::LibXML::Simple;
 use Data::Dumper;
 
 with any_moose('X::Getopt');
 
-has authsub => (
-    is => 'rw', isa => 'Net::Google::AuthSub',
-    default => sub { Net::Google::AuthSub->new(service => 'cp') },
+has oauth => (
+    is => 'rw', isa => 'OAuth::Cmdline',
+    default => sub { OAuth::Cmdline->new(site => 'google-contacts') },
     lazy => 1,
 );
 
@@ -66,9 +66,7 @@ sub run {
 sub authorize {
     my $self = shift;
 
-    my $resp = $self->authsub->login($self->email, $self->password);
-    $resp && $resp->is_success or die "Auth failed against " . $self->email;
-    $self->auth_params({ $self->authsub->auth_params });
+    $self->auth_params({ $self->oauth->authorization_headers });
 }
 
 sub retrieve_contacts {
